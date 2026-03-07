@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
+import { Inter, Great_Vibes } from "next/font/google";
+import { siteConfig } from "../app.config";
 import "./globals.css";
 
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const greatVibes = Great_Vibes({ weight: "400", subsets: ["latin"], variable: "--font-romantic" });
+
 export const metadata: Metadata = {
-  title: "Happy Anniversary",
-  description: "Anniversary wishes page"
+  title: `Happy ${siteConfig.occasion}`,
+  description: `${siteConfig.occasion} wishes page`
 };
 
 export default function RootLayout({
@@ -13,7 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={`${inter.variable} ${greatVibes.variable} font-sans antialiased`}>
+        {children}
+      </body>
     </html>
   );
 }

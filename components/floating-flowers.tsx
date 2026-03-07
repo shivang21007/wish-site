@@ -1,5 +1,7 @@
 "use client";
 
+import { siteConfig } from "../app.config";
+
 const flowers = [
   { id: 1, left: "5%", delay: "0s", duration: "6.2s", size: "text-2xl" },
   { id: 2, left: "17%", delay: "1s", duration: "7.5s", size: "text-xl" },
@@ -17,13 +19,14 @@ export function FloatingFlowers() {
       {flowers.map((flower) => (
         <span
           key={flower.id}
-          className={`absolute bottom-[-8%] ${flower.size} opacity-80`}
+          className={`absolute bottom-[-8%] ${flower.size}`}
           style={{
             left: flower.left,
-            animation: `flowerRise ${flower.duration} linear ${flower.delay} infinite`
+            animation: `flowerRise ${flower.duration} linear ${flower.delay} infinite`,
+            opacity: siteConfig.theme.floatingElements.opacity
           }}
         >
-          🌸
+          {siteConfig.theme.floatingElements.emoji}
         </span>
       ))}
     </div>

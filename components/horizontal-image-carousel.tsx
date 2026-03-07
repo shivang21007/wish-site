@@ -1,67 +1,64 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import * as React from "react";
+import Autoplay from "embla-carousel-autoplay";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious
+} from "@/components/ui/carousel";
+import { siteConfig } from "../app.config";
 
 type HorizontalImageCarouselProps = {
   images: string[];
 };
 
 export function HorizontalImageCarousel({ images }: HorizontalImageCarouselProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % images.length);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [images.length]);
+  const plugin = React.useRef(
+    Autoplay({ delay: siteConfig.carousel.horizontalSwipeDelay, stopOnInteraction: false })
+  );
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-3 md:px-6">
-      <div
-        className="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white/70 shadow-soft backdrop-blur"
-        onTouchStart={(event) => setTouchStart(event.touches[0]?.clientX ?? null)}
-        onTouchEnd={(event) => {
-          if (touchStart === null) {
-            return;
-          }
-
-          const touchEnd = event.changedTouches[0]?.clientX ?? touchStart;
-          const diff = touchStart - touchEnd;
-
-          if (diff > 30) {
-            setActiveIndex((prev) => (prev + 1) % images.length);
-          } else if (diff < -30) {
-            setActiveIndex((prev) => (prev - 1 + images.length) % images.length);
-          }
-
-          setTouchStart(null);
+    <div className="mx-auto w-full max-w-5xl px-8 pb-12">
+      <Carousel
+        plugins={[plugin.current]}
+        className="w-full"
+        onMouseEnter={plugin.current.stop}
+        onMouseLeave={plugin.current.reset}
+        opts={{
+          align: "start",
+          loop: true
         }}
       >
-        <div
-          className="flex transition-transform duration-500 ease-out"
-          style={{ transform: `translateX(-${activeIndex * 100}%)` }}
-        >
+        <CarouselContent className="-ml-2 md:-ml-4">
           {images.map((src, idx) => (
-            <div key={`${src}-${idx}`} className="relative h-[300px] min-w-full sm:h-[380px] md:h-[460px]">
-              <Image src={src} alt={`Memory ${idx + 1}`} fill className="object-cover" priority={idx === 0} />
-            </div>
+            <CarouselItem key={`${src}-${idx}`} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+              <div className="p-1">
+                <Card className="overflow-hidden border-slate-200/50 bg-white/40 shadow-soft backdrop-blur-sm">
+                  <CardContent className="flex aspect-square items-center justify-center p-2">
+                    <div className="relative h-full w-full rounded-md overflow-hidden">
+                      <Image 
+                        src={src} 
+                        alt={`Memory ${idx + 1}`} 
+                        fill 
+                        className="object-cover transition-transform duration-500 hover:scale-105" 
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </CarouselItem>
           ))}
+        </CarouselContent>
+        <div className="hidden sm:block">
+          <CarouselPrevious className="bg-white/70 backdrop-blur hover:bg-white" />
+          <CarouselNext className="bg-white/70 backdrop-blur hover:bg-white" />
         </div>
-      </div>
-      <div className="mt-4 flex justify-center gap-2">
-        {images.map((_, idx) => (
-          <button
-            key={`dot-${idx}`}
-            aria-label={`Go to image ${idx + 1}`}
-            onClick={() => setActiveIndex(idx)}
-            className={`h-2.5 rounded-full transition-all ${idx === activeIndex ? "w-7 bg-slate-800" : "w-2.5 bg-slate-400"}`}
-          />
-        ))}
-      </div>
+      </Carousel>
     </div>
   );
 }
