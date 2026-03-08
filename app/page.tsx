@@ -21,6 +21,7 @@ export default function HomePage() {
     if (introDone) {
       const duration = siteConfig.theme.confetti.durationMs;
       const end = Date.now() + duration;
+      let animationFrameId: number;
 
       const frame = () => {
         confetti({
@@ -39,10 +40,16 @@ export default function HomePage() {
         });
 
         if (Date.now() < end) {
-          requestAnimationFrame(frame);
+          animationFrameId = requestAnimationFrame(frame);
         }
       };
       frame();
+
+      return () => {
+        if (animationFrameId !== undefined) {
+          cancelAnimationFrame(animationFrameId);
+        }
+      };
     }
   }, [introDone]);
 
