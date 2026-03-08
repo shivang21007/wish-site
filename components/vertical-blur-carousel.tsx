@@ -42,7 +42,7 @@ function ImageStrip({
 export function VerticalBlurCarousel({ images }: VerticalBlurCarouselProps) {
   return (
     <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-40 mix-blend-multiply dark:mix-blend-screen scale-[1.05]">
-      <div className="pointer-events-auto flex items-center justify-center gap-2 sm:gap-6 w-full h-full max-w-6xl px-4">
+      <div className="pointer-events-none flex items-center justify-center gap-2 sm:gap-6 w-full h-full max-w-6xl px-4">
         <ImageStrip images={images} speed={siteConfig.carousel.verticalSpeeds.leftStrip} />
         <ImageStrip images={images.slice(2, 6).concat(images.slice(0, 2))} reverse speed={siteConfig.carousel.verticalSpeeds.centerStrip} />
         <ImageStrip images={images.slice(4, 8).concat(images.slice(0, 4))} speed={siteConfig.carousel.verticalSpeeds.rightStrip} className="hidden sm:block" />
