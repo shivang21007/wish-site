@@ -63,7 +63,7 @@ export const siteConfig = {
   // 3. INTRO SEQUENCE CONTENT & TIMINGS
   // --------------------------------------------------------------------------
   intro: {
-    // Step 1: Inital sweeping text
+    // Step 1: Initial sweeping text
     firstText: "Today is 1st Feb 2026",
     
     // Step 2: Second text holding question/statement
