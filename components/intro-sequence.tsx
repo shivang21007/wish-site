@@ -56,7 +56,7 @@ export function IntroSequence({ previewImages, onComplete }: IntroSequenceProps)
         }
         return prev + 1;
       });
-    }, 600); // 600ms between each popup
+    }, siteConfig.intro.timings.popupStaggerInterval); // Interval between each popup (ms)
 
     return () => clearInterval(timer);
   }, [step, popupImages.length]);
